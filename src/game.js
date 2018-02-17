@@ -6,12 +6,16 @@ class Game extends React.Component {
     super(props);
     this.state = {
       history: [
-        {squares: Array(9).fill(null)},
+        {squares: emptySquares()},
       ],
       stepNumber: 0,
       xIsNext: true,
       currentSortOrder: "ASC",
     };
+  }
+
+  currentPlayer() {
+    return this.state.xIsNext ? 'X' : 'O';
   }
 
   oppositeSortOrder () {
@@ -31,7 +35,7 @@ class Game extends React.Component {
 
     if (calculateWinner(squares) || squares[i]) { return; }
 
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
+    squares[i] = this.currentPlayer();
     this.setState({
       history: history.concat([{squares: squares}]),
       stepNumber: history.length,
@@ -46,10 +50,12 @@ class Game extends React.Component {
     });
   }
 
-  render() {
+  currentSquares () {
+    return this.state.history[this.state.stepNumber].squares
+  }
+
+  movesList () {
     const history = this.state.history;
-    const current = history[this.state.stepNumber]
-    const winner = calculateWinner(current.squares);
 
     let moves = history.map((step, move) => {
       const data = moveData(history, move);
@@ -70,29 +76,38 @@ class Game extends React.Component {
       moves.reverse();
     }
 
+    return moves;
+  }
+
+  status () {
+    const winner = calculateWinner(this.currentSquares());
+
     let status;
     if (winner) {
       status = 'Winner: ' + winner;
     } else {
-      const mark = this.state.xIsNext ? 'X' : 'O';
-      status = `Next player: ${mark}`;
+      status = `Next player: ${this.currentPlayer()}`;
     }
 
+    return status;
+  }
+
+  render() {
     return (
       <div className="game">
         <div className="game-board">
           <Board
-            squares={current.squares}
+            squares={this.currentSquares()}
             onClick={(i) => this.handleClick(i)}
           />
         </div>
         <div className="game-info">
-          <div>{status}</div>
+          <div>{this.status()}</div>
           <div>
             <button onClick={() => this.toggleSortOrder()}
               >Sort {this.oppositeSortOrder()}</button>
           </div>
-          <ul>{moves}</ul>
+          <ul>{this.movesList()}</ul>
         </div>
       </div>
     );
@@ -142,5 +157,10 @@ function moveCell(moveIndex) {
     col: (moveIndex % 3) + 1
   };
 }
+
+function emptySquares () {
+  return Array(9).fill(null);
+}
+
 
 export default Game;
