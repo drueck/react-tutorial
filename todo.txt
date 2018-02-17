@@ -1,2 +1,0 @@
-1. When somone wins, highlight the squares that resulted in the win.
-2. If all the squares are filled, indicate it's a draw (or cat's game).
