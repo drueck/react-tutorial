@@ -2,7 +2,7 @@ import React from 'react';
 
 class Square extends React.Component {
   squareClasses() {
-    return this.props.isWinner() ? "square winner" : "square";
+    return this.props.isWinningSquare() ? "square winner" : "square";
   }
 
   render() {

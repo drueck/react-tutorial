@@ -92,10 +92,10 @@ class Game extends React.Component {
     return status;
   }
 
-  isWinner(i) {
+  isWinningSquare(squareIndex) {
     const gmStatus = gameStatus(this.currentSquares());
     if (gmStatus.status === "Won") {
-      return gmStatus.winningSquares.includes(i);
+      return gmStatus.winningSquares.includes(squareIndex);
     } else {
       return false;
     }
@@ -107,7 +107,7 @@ class Game extends React.Component {
         <div className="game-board">
           <Board
             squares={this.currentSquares()}
-            isWinner={(i) => this.isWinner(i)}
+            isWinningSquare={(i) => this.isWinningSquare(i)}
             onClick={(i) => this.handleClick(i)}
           />
         </div>

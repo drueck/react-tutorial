@@ -23,7 +23,7 @@ class Board extends React.Component {
       <Square
         key={i}
         value={this.props.squares[i]}
-        isWinner={() => this.props.isWinner(i)}
+        isWinningSquare={() => this.props.isWinningSquare(i)}
         onClick={() => this.props.onClick(i)}
       />
     );
