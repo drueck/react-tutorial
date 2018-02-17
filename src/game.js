@@ -18,11 +18,11 @@ class Game extends React.Component {
     return this.state.xIsNext ? 'X' : 'O';
   }
 
-  oppositeSortOrder () {
+  oppositeSortOrder() {
     return this.state.currentSortOrder === "ASC" ? "DESC" : "ASC";
   }
 
-  toggleSortOrder () {
+  toggleSortOrder() {
     this.setState ({
       currentSortOrder: this.oppositeSortOrder(),
     });
@@ -50,11 +50,11 @@ class Game extends React.Component {
     });
   }
 
-  currentSquares () {
+  currentSquares() {
     return this.state.history[this.state.stepNumber].squares
   }
 
-  movesList () {
+  movesList() {
     const history = this.state.history;
 
     let moves = history.map((step, move) => {
@@ -79,7 +79,7 @@ class Game extends React.Component {
     return moves;
   }
 
-  status () {
+  status() {
     const gmStatus = gameStatus(this.currentSquares());
 
     let status;
@@ -126,7 +126,7 @@ class Game extends React.Component {
   }
 }
 
-function gameStatus (squares) {
+function gameStatus(squares) {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
