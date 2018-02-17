@@ -33,7 +33,7 @@ class Game extends React.Component {
     const current = history[history.length - 1];
     const squares = current.squares.slice();
 
-    if (calculateWinner(squares) || squares[i]) { return; }
+    if (gameStatus(squares).status !== "In Progress" || squares[i]) { return; }
 
     squares[i] = this.currentPlayer();
     this.setState({
@@ -80,16 +80,25 @@ class Game extends React.Component {
   }
 
   status () {
-    const winner = calculateWinner(this.currentSquares());
+    const gmStatus = gameStatus(this.currentSquares());
 
     let status;
-    if (winner) {
-      status = 'Winner: ' + winner;
+    if (gmStatus.status === "Won") {
+      status = 'Winner: ' + gmStatus.winner;
     } else {
       status = `Next player: ${this.currentPlayer()}`;
     }
 
     return status;
+  }
+
+  isWinner(i) {
+    const gmStatus = gameStatus(this.currentSquares());
+    if (gmStatus.status === "Won") {
+      return gmStatus.winningSquares.includes(i);
+    } else {
+      return false;
+    }
   }
 
   render() {
@@ -98,6 +107,7 @@ class Game extends React.Component {
         <div className="game-board">
           <Board
             squares={this.currentSquares()}
+            isWinner={(i) => this.isWinner(i)}
             onClick={(i) => this.handleClick(i)}
           />
         </div>
@@ -114,7 +124,7 @@ class Game extends React.Component {
   }
 }
 
-function calculateWinner(squares) {
+function gameStatus (squares) {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -125,13 +135,31 @@ function calculateWinner(squares) {
     [0, 4, 8],
     [2, 4, 6],
   ];
+
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return {
+        status: "Won",
+        winner: squares[a],
+        winningSquares: lines[i],
+      };
     }
   }
-  return null;
+
+  if (squares.includes(null)) {
+    return {
+      status: "In Progress",
+      winner: null,
+      winningSquares: [],
+    };
+  } else {
+    return {
+      status: "Draw",
+      winner: null,
+      winningSquares: []
+    }
+  }
 }
 
 function moveData(history, step) {
@@ -161,6 +189,5 @@ function moveCell(moveIndex) {
 function emptySquares () {
   return Array(9).fill(null);
 }
-
 
 export default Game;

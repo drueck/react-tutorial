@@ -2,7 +2,11 @@ import React from 'react';
 import Square from './square';
 
 class Board extends React.Component {
-  renderRow (rowNum) {
+  rows() {
+    return [0, 1, 2].map((row) => this.renderRow(row));
+  }
+
+  renderRow(rowNum) {
     const squares = [0, 1, 2].map((col) => {
       return this.renderSquare(col + rowNum * 3);
     });
@@ -14,22 +18,21 @@ class Board extends React.Component {
     );
   }
 
-  renderSquare (i) {
+  renderSquare(i) {
     return (
       <Square
         key={i}
         value={this.props.squares[i]}
+        isWinner={() => this.props.isWinner(i)}
         onClick={() => this.props.onClick(i)}
       />
     );
   }
 
   render() {
-    const rows = [0, 1, 2].map((row) => this.renderRow(row));
-
     return (
       <div>
-        {rows}
+        {this.rows()}
       </div>
     );
   }
