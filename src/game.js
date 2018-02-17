@@ -85,6 +85,8 @@ class Game extends React.Component {
     let status;
     if (gmStatus.status === "Won") {
       status = 'Winner: ' + gmStatus.winner;
+    } else if (gmStatus.status === "Draw") {
+      status = "Cat's Game!";
     } else {
       status = `Next player: ${this.currentPlayer()}`;
     }
